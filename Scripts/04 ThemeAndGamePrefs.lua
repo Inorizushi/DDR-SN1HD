@@ -18,3 +18,12 @@ function ScreenGameplay_P2X()
 		return WideScale(SCREEN_CENTER_X+175,SCREEN_CENTER_X+240);
 	end
 end
+
+function TitleChoices()
+	local coinMode = GAMESTATE:GetCoinMode()
+	if coinMode == 'CoinMode_Home' then
+		return "Start"
+	else
+		return "ArcStart"
+	end
+end;

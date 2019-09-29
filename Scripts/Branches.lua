@@ -41,7 +41,7 @@ end
 Branch.TitleMenu = function()
 	-- home mode is the most assumed use of sm-ssc.
 	if GAMESTATE:GetCoinMode() == "CoinMode_Home" then
-		return "ScreenTitleMenu"
+		return "ScreenTitleBefore"
 	end
 	-- arcade junk:
 	if GAMESTATE:GetCoinsNeededToJoin() > GAMESTATE:GetCoins() then

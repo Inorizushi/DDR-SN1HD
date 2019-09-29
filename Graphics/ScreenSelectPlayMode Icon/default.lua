@@ -18,8 +18,10 @@ local t = Def.ActorFrame{
 	LoadFont("_@apex commercial 20px")..{
 		InitCommand=function(s)
 			s:skewx(-0.15):halign(0):xy(-180,-35):zoomx(1.75):zoomy(1.25)
-			if gc:GetName() == "Starter" then
+			if gc:GetName() == "Starter" or gc:GetName() == "Nonstop" then
 				s:diffuse(color("#3ef8fb"))
+			elseif gc:GetName() == "Challenge" then
+				s:diffuse(Color.Red)
 			else
 				s:diffuse(color("#fbfa3e"))
 			end

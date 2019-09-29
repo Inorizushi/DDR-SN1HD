@@ -1,73 +1,94 @@
-local transform = function(self,offsetFromCenter,itemIndex,numitems)
-	self:y( offsetFromCenter * 44 );
-end
-return Def.CourseContentsList {
-	MaxSongs = 10;
-    NumItemsToDraw = 5;
-	SetCommand=function(self)
-		self:SetFromGameState();
-		self:SetCurrentAndDestinationItem(1);
-		self:SetPauseCountdownSeconds(1);
-		self:SetSecondsPauseBetweenItems( 0.25 );
---		self:SetTransformFromFunction(transform);
-		--
-		self:SetDestinationItem(1);
-		self:SetLoop(false);
-		self:SetMask(294,44);
-	end;
-	CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
-	CurrentTrailP2ChangedMessageCommand=cmd(playcommand,"Set");
+local maxVisibleContents = 5 -- equivalent of MAX_VISIBLE_CONTENTS
+local maxTotalContents = 56 -- equivalent of MAX_TOTAL_CONTENTS
+local entryHeight = 38
+local itemSecondsPause = 0.75
+local GetOn = 0
+return Def.ActorFrame{
+	Def.Quad{
+		Name="TopMask";
+		InitCommand=cmd(valign,0;y,-(entryHeight*4);zoomto,262,entryHeight*2.5;MaskSource);
+	};
 
-	Display = Def.ActorFrame { 
-		InitCommand=cmd(setsize,270,44);
+	-- course contents list = rage
+	Def.CourseContentsList{
+		NumItemsToDraw=maxVisibleContents;
+		MaxSongs=maxTotalContents;
+		SecondsPerItem=itemSecondsPause;
 
-		LoadActor(THEME:GetPathG("CourseEntryDisplay","bar"));
-		LoadFont("Common Course")..{
-				InitCommand=cmd(x,-110);
+		TransformFunction=function(self,offset,itemIndex,numItems)
+			self:y(offset*entryHeight)
+		end;
+
+		BeginCommand=cmd(playcommand,"Set");
+		CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
+		CurrentTrailP2ChangedMessageCommand=cmd(playcommand,"Set");
+		SetCommand=function(self)
+			self:SetFromGameState()
+			self:SetCurrentAndDestinationItem(1)
+			self:PositionItems()
+
+			self:SetLoop(false)
+			self:SetPauseCountdownSeconds(1)
+			self:SetSecondsPauseBetweenItems(itemSecondsPause)
+		end;
+
+		Display=Def.ActorFrame{
+			InitCommand=cmd(setsize,262,38);
+			SetSongCommand=function(s,param)
+				if GetOn == 0 then
+					s:finishtweening():addx(-SCREEN_WIDTH/2.2):sleep(0.5):sleep(param.Number/5):decelerate(0.2):addx((SCREEN_WIDTH/2.2)+10):decelerate(0.05):addx(-10):sleep(0):queuecommand("SetOn")
+				end
+			end,
+			SetOnCommand=function(s) GetOn = 1 end,
+			LoadActor(THEME:GetPathG("CourseEntryDisplay","bar"));
+
+			-- entry number
+			LoadFont("_@apex commercial 20px")..{
+				InitCommand=cmd(x,-116;zoomx,1.4;zoomy,1.2);
 				SetSongCommand=function(self,param)
-				self:settext(param.Number)
-			end;
-		};
-		Def.TextBanner{
-				InitCommand=cmd(x,-89;draworder,99;Load,"TextBannerGameplay";SetFromString,"","","","","","");
+					self:settext(param.Number)
+					self:diffuse(Color.Orange)
+				end;
+			};
+			-- textbanner
+			Def.BitmapText{
+				Font="_russell square 16px";
+				InitCommand=cmd(halign,0;x,-89;y,-8;zoom,0.75;maxwidth,278);
 				SetSongCommand=function(self,param)
 					if not param.Song or param.Secret then
 						-- set fake ("??????????" with no artist)
-						self:SetFromString("??????????","??????????", "","", "","")
+						self:settext("??????????")
 						self:diffuse(color("#FFFFFF"))
 					else
 						-- set real
-						self:SetFromSong(param.Song)
-						self:diffuse(SONGMAN:GetSongColor(param.Song))
+						self:settext(param.Song:GetDisplayMainTitle())
+						self:diffuse(color("#FFFFFF"))
 					end
 				end;
 			};
-
- 		LoadActor(THEME:GetPathF("StepsDisplay","ticks 2x1.png"))..{
-				Name="FootClanMembershipToken"; -- teenage mutant ninja stepmania
-				InitCommand=cmd(x,90;y,9;pause;);
-				SetSongCommand=function(self,param)
-					local difficulty = param.Difficulty
-					local customDiff = GetCustomDifficulty(param.Steps:GetStepsType(),difficulty,nil)
-					self:diffuse(CustomDifficultyToColor(customDiff))
-				end;
+			Def.ActorFrame{
+				InitCommand=function(s) s:xy(10,14) end,
+				LoadActor(THEME:GetPathG("CourseEntryDisplay","meter"))..{
+					SetSongCommand=function(self,param)
+						local difficulty = param.Difficulty
+						local customDiff = GetCustomDifficulty(param.Steps:GetStepsType(),difficulty,nil)
+						self:diffuse(ColorDarkTone(CustomDifficultyToColor(customDiff)))
+					end;
+				};
+				LoadActor(THEME:GetPathG("CourseEntryDisplay","meter"))..{
+					SetSongCommand=function(self,param)
+						local difficulty = param.Difficulty
+						local customDiff = GetCustomDifficulty(param.Steps:GetStepsType(),difficulty,nil)
+						local meter = param.Meter;
+						self:diffuse(CustomDifficultyToColor(customDiff))
+						if  meter ~= "?" then
+							self:cropright(1-meter/10)
+						else
+							self:cropright(0)
+						end
+					end;
+				};
 			};
-			LoadFont("ScreenMusicScroll titles")..{
-				Name="DifficultyMeter";
-				InitCommand=cmd(x,100;y,12;zoom,0.8);
-				SetSongCommand=function(self,param)
-					self:settext(param.Meter)
-					local difficulty = param.Difficulty
-					local customDiff = GetCustomDifficulty(param.Steps:GetStepsType(),difficulty,nil)
-					self:diffuse(CustomDifficultyToColor(customDiff))
-				end;
-			};
-			-- modifiers
-			LoadFont("Common normal")..{
-				InitCommand=cmd(x,128;y,10;halign,1;zoom,0.5);
-				SetSongCommand=function(self,param)
-					self:settext(param.Modifiers)
-				end;
-			};
+		};
 	};
 };

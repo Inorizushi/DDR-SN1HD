@@ -27,7 +27,8 @@ t[#t+1] = Def.ActorFrame {
 		OnCommand=cmd(play);
 	};
 	Def.Quad{
-		InitCommand=cmd(FullScreen;diffuse,color("0,0,0,0.4"));
+		InitCommand=cmd(FullScreen;diffuse,color("0,0,0,0"));
+		OnCommand=cmd(diffusealpha,0;linear,0.4;diffusealpha,0.4);
 	};
 	LoadActor("left_panel")..{
 		InitCommand=cmd(x,SCREEN_LEFT+47;y,SCREEN_CENTER_Y);

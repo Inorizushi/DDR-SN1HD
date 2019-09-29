@@ -24,8 +24,12 @@ local t = Def.ActorFrame {
 	LoadActor("../_section inner")..{
 		SetMessageCommand=function(self, param)
 			local group = param.Text;
-			local color_grp = group_colors[group] or "FFFFFF"
-			self:diffuse(color(color_grp));
+			local so = GAMESTATE:GetSortOrder()
+			if so == "SortOrder_Group" then
+				self:diffuse(SongAttributes.GetGroupColor(group));
+			else
+				self:diffuse(color(color_group[group]));
+			end
 		end;
 	};
 	LoadActor("../_section outer");
@@ -35,13 +39,20 @@ t[#t+1] = Def.ActorFrame{
 	--GroupName
 	Def.BitmapText{
 		Font="_@apex commercial 20px";
-		InitCommand=cmd(halign,0;x,-140;maxwidth,256;);
+		InitCommand=cmd(halign,0;x,-140;maxwidth,256;zoomx,1.3;skewx,-0.1);
 		SetMessageCommand=function(self, param)
-		local group = param.Text;
-		local groupname = group_names[group];
-			self:settext(group);
-		local color_grp= group_colors[group] or "FFFE21"
-			self:diffuse(color(color_grp));
+			local group = param.Text;
+			local so = GAMESTATE:GetSortOrder()
+			if so == "SortOrder_Group" then
+				self:diffuse(SongAttributes.GetGroupColor(group));
+			else
+				self:diffuse(Color.Yellow);
+			end;
+			if group_name[group] ~= nil then
+				self:settext(group_rename[group])
+			else
+				self:settext(group);
+			end
 		end;
 	};
 };
