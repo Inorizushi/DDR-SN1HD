@@ -1,5 +1,4 @@
 -- ScreenHowToPlay Overlay
-
 -- The math.floor(10000*aspect) trick is used to circumvent float precision problems.
 local aspectRatioSuffix = {
 	[math.floor(10000*4/3)] = " 4_3",
@@ -30,78 +29,35 @@ local t = Def.ActorFrame{
 	};
 	LoadActor("howtoplay small")..{
 		Name="HowToPlaySmall";
-		InitCommand=cmd(x,SCREEN_CENTER_X+130;y,SCREEN_TOP+25;);
+		InitCommand=cmd(x,WideScale(SCREEN_CENTER_X+130,SCREEN_CENTER_X+200);y,SCREEN_TOP+25;);
 		OnCommand=cmd(addy,-50;sleep,0.3;sleep,1.8;linear,0.2;addy,50);
 	};
 	LoadActor("feet")..{
 		InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y);
 		OnCommand=cmd(addy,-64;croptop,1;sleep,2.4;linear,0.233;addy,64;croptop,0;sleep,1.267;linear,0.233;addy,-64;croptop,1);
 	};
-	--Pre-Step message
+	-- let the messages begin
 	Def.ActorFrame {
-		LoadActor("pinkhand")..{
-			InitCommand=cmd(x,SCREEN_LEFT+320;y,SCREEN_CENTER_Y-130);
-			OnCommand=cmd(bob;effectperiod,1;effectmagnitude,-20,0,0;diffusealpha,0;sleep,6;linear,0;diffusealpha,1;sleep,2;linear,0;diffusealpha,0);
+		InitCommand=cmd(x,WideScale(SCREEN_CENTER_X-146,SCREEN_CENTER_X-240);y,SCREEN_CENTER_Y+37);
+		LoadActor("text_up")..{
+			OnCommand=cmd(zoomy,0;sleep,10;decelerate,0.3;zoomy,1;sleep,3.3;zoomy,0);
 		};
-		LoadActor("tapmessage")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X-160;y,SCREEN_CENTER_Y+40);
-			OnCommand=cmd(diffusealpha,0;sleep,6;linear,0;diffusealpha,1;sleep,2;linear,0;diffusealpha,0);
+		LoadActor("text_jump")..{
+			OnCommand=cmd(zoomy,0;sleep,16.4;decelerate,0.3;zoomy,1;sleep,3.3;zoomy,0);
+		};
+		--Freeze 1
+		LoadActor("text_freeze")..{
+			OnCommand=cmd(zoomy,0;sleep,22.6;decelerate,0.3;zoomy,1;sleep,2;zoomy,0);
+		};
+		--Freeze 2
+		LoadActor("text_missfreeze")..{
+			OnCommand=cmd(zoomy,0;sleep,27.4;decelerate,0.3;zoomy,1;sleep,2;zoomy,0);
+		};
+		LoadActor("text_gameover")..{
+			OnCommand=cmd(zoomy,0;sleep,32;decelerate,0.3;zoomy,1;);
 		};
 	};
--- 1st Step -- DOWN
-	Def.ActorFrame {
-		LoadActor("pinkhand")..{
-			InitCommand=cmd(x,SCREEN_LEFT+260;y,SCREEN_CENTER_Y-78);
-			OnCommand=cmd(addy,120;diffusealpha,0;sleep,9.7;linear,0;diffusealpha,1;linear,0.2;addy,-120;sleep,1.7;linear,0.2;addy,120;linear,0;diffusealpha,0);
-		};
-		LoadActor("tapmessage")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X-160;y,SCREEN_CENTER_Y+40);
-			OnCommand=cmd(diffusealpha,0;sleep,9.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-	};
---2nd Step -- UP
-	Def.ActorFrame {
-		LoadActor("taphand")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+192;y,SCREEN_CENTER_Y-60);
-			OnCommand=cmd(bob;effectperiod,1;effectmagnitude,0,20,0;diffusealpha,0;sleep,12.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-		LoadActor("tapmessage")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+160;y,SCREEN_CENTER_Y+40);
-			OnCommand=cmd(diffusealpha,0;sleep,12.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-	};
---3rd Step -- LEFT
-	Def.ActorFrame {
-		LoadActor("taphand")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+64;y,SCREEN_CENTER_Y-60);
-			OnCommand=cmd(bob;effectperiod,1;effectmagnitude,0,20,0;diffusealpha,0;sleep,15.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-		LoadActor("tapmessage")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+160;y,SCREEN_CENTER_Y+40);
-			OnCommand=cmd(diffusealpha,0;sleep,15.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-	};
---4th Step -- JUMP
-	Def.ActorFrame {
-		LoadActor("jumphands")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+160;y,SCREEN_CENTER_Y-60);
-			OnCommand=cmd(bob;effectperiod,1;effectmagnitude,0,20,0;diffusealpha,0;sleep,18.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-		LoadActor("jumpmessage")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+160;y,SCREEN_CENTER_Y+40);
-			OnCommand=cmd(diffusealpha,0;sleep,18.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-	};
---Misstep
-	Def.ActorFrame {
-		LoadActor("taphand")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+228;y,SCREEN_CENTER_Y-130);
-			OnCommand=cmd(bob;effectperiod,1;effectmagnitude,0,20,0;diffusealpha,0;sleep,22.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
-		LoadActor("missmessage")..{
-			InitCommand=cmd(x,SCREEN_CENTER_X+160;y,SCREEN_CENTER_Y+40);
-			OnCommand=cmd(diffusealpha,0;sleep,22.7;linear,0;diffusealpha,1;sleep,1.7;linear,0;diffusealpha,0);
-		};
+	Def.ActorFrame{
 	};
 };
 t[#t+1] = LoadActor(THEME:GetPathG("ScreenGameplay","LifeFrame/"..lifeFrame))..{
@@ -116,7 +72,7 @@ t[#t+1] = LoadActor(THEME:GetPathG("ScreenGameplay","LifeFrame/"..line))..{
 	end,
 };
 
-t[#t+1] = LoadActor(THEME:GetPathG("","Badges/P1"))..{
+t[#t+1] = LoadActor(THEME:GetPathG("","Badges/LB_P1"))..{
 	InitCommand=function(self)
 		self:x(SCREEN_LEFT+10):y(SCREEN_TOP+25)
 	end;
