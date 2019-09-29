@@ -33,6 +33,13 @@ t[#t+1] = Def.Model{
 	Meshes = "../_Style/(5th) Rage/model.txt";
 	Bones = "../_Style/(5th) Rage/Rest/Rest.redir";
 	InitCommand=cmd(x,SCREEN_CENTER_X-140;y,SCREEN_CENTER_Y+96;zoom,12;rotationy,-140;cullmode,'CullMode_None';);
+	BeginCommand=function(s)
+		if GAMESTATE:GetNumPlayersEnabled() == 2 then
+			s:visible(false)
+		else
+			s:visible(true)
+		end
+	end,
 	OnCommand=cmd(vertalign,bottom;draworder,90;diffusealpha,0;zoom,0;sleep,0.264;sleep,0.792;sleep,0.264;sleep,0.132;diffusealpha,1;decelerate,0.066;zoom,12;accelerate,0.066;zoom,10;decelerate,0.066;zoom,12);
 	GainFocusCommand=cmd(bounceend,0.2;zoom,12);
 	LoseFocusCommand=cmd(finishtweening;bouncebegin,0.2;zoom,0);
@@ -44,6 +51,13 @@ t[#t+1] = Def.Model{
 	Meshes = "../_Style/(5th) Emi/model.txt";
 	Bones = "../_Style/(5th) Emi/Rest/Rest.redir";
 	InitCommand=cmd(x,SCREEN_CENTER_X-140;y,SCREEN_CENTER_Y+96;zoom,12;rotationy,-140;cullmode,'CullMode_None';);
+	BeginCommand=function(s)
+		if GAMESTATE:GetNumPlayersEnabled() == 2 then
+			s:visible(false)
+		else
+			s:visible(true)
+		end
+	end,
 	OnCommand=cmd(vertalign,bottom;draworder,90;diffusealpha,0;zoom,0;sleep,0.264;sleep,0.792;sleep,0.264;sleep,0.132;diffusealpha,1;decelerate,0.066;zoom,12;accelerate,0.066;zoom,10;decelerate,0.066;zoom,12);
 	GainFocusCommand=cmd(bounceend,0.2;zoom,12);
 	LoseFocusCommand=cmd(finishtweening;bouncebegin,0.2;zoom,0);

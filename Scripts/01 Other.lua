@@ -1,3 +1,20 @@
+function DDRInput(self)
+    return function(event)
+        if not event.PlayerNumber then return end
+        self.pn = event.PlayerNumber
+        if ToEnumShortString(event.type) == "FirstPress" then
+            self:playcommand(event.GameButton)
+        end
+        if ToEnumShortString(event.type) == "Release" then
+            self:queuecommand(event.GameButton.."Release")
+        end
+				if ToEnumShortString(event.type) == "Repeat" then
+					self:queuecommand(event.GameButton.."Repeat")
+				end
+    end
+end
+
+
 function JudgmentTransformCommand( self, params )
 	local x = 0
 	local y = -55
@@ -48,6 +65,24 @@ function GetOrCreateChild(tab, field, kind)
         tab[field] = out
     else out = tab[field] end
     return out
+end
+
+--stuff for doing update functions that i love so -tertu
+function CalculateWaitFrames(targetDelta, delta)
+    return math.max(1, math.round(targetDelta/delta))-1
+end
+
+--returns a function that returns true if the function should run this update
+function GetUpdateTimer(targetDelta)
+    local frameCounter = 0
+    return function()
+        if frameCounter == 0 then
+            frameCounter = CalculateWaitFrames(targetDelta, 1/DISPLAY:GetCumFPS())
+            return true
+        end
+        frameCounter = frameCounter - 1
+        return false
+    end
 end
 
 function TextBannerAfterSet(self,param)

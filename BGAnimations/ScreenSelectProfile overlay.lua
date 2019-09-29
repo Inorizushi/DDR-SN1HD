@@ -381,7 +381,7 @@ function LoadPlayerStuff(Player)
 	if (Player == PLAYER_1) then
 		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_1,'single')..{
 			Name = "GVRD1S";
-      InitCommand=cmd(x,0;y,5;zoom,0.56;diffusealpha,0;diffuse,PlayerColor(PLAYER_1));
+      InitCommand=cmd(x,-2;y,8;zoom,0.56;diffusealpha,0;diffuse,PlayerColor(PLAYER_1));
 			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;);
 			OffCommand=cmd(linear,0.05;diffusealpha,0);
 		};
@@ -421,7 +421,7 @@ function LoadPlayerStuff(Player)
 	else
 		t[#t+1] = LoadActor( THEME:GetPathG("ScreenSelectProfile", "GrooveRadar" ),1,0.2,0.2,0.2,0.5,PLAYER_2,'single')..{
 			Name = "GVRD2S";
-			InitCommand=cmd(x,3;y,5;zoom,0.56;diffusealpha,0;diffuse,PlayerColor(PLAYER_2));
+			InitCommand=cmd(x,0;y,8;zoom,0.56;diffusealpha,0;diffuse,PlayerColor(PLAYER_2));
 			OnCommand=cmd(sleep,0.9;linear,0.05;diffusealpha,1;);
 			OffCommand=cmd(linear,0.05;diffusealpha,0);
 		};

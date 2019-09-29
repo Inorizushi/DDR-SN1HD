@@ -4,7 +4,7 @@ t = Def.ActorFrame{
 	InitCommand=cmd(diffuseleftedge,color("1,1,1,0"));
 	};
 	LoadActor("ScreenOptions line highlightPB2")..{
-		InitCommand=cmd(addx,200);
+		InitCommand=cmd(addx,200;zoomx,-1);
 	};
 	Def.Sprite {
 	Texture="ScreenPlayerOptions LineHighlight P1 1x2";

@@ -5,6 +5,58 @@ t[#t+1] = StandardDecorationFromFile("StageDisplay","StageDisplay")
 t[#t+1] = StandardDecorationFromFile("BannerFrame","BannerFrame")
 t[#t+1] = StandardDecorationFromFileOptional("BPMDisplay","BPMDisplay")
 t[#t+1] = StandardDecorationFromFileOptional("SortDisplay","SortDisplay")
+
+function WheelMove(mov)
+	local mw = SCREENMAN:GetTopScreen("ScreenSelectMusic"):GetChild("MusicWheel");
+	mw:Move(mov)
+  end;
+  
+  t[#t+1] = Def.ActorFrame{
+	OnCommand=function(self)
+	  SCREENMAN:GetTopScreen():AddInputCallback(DDRInput(self))
+	  SCREENMAN:set_input_redirected(PLAYER_1, false)
+	  SCREENMAN:set_input_redirected(PLAYER_2, false)
+	end,
+	OffCommand=function(self)
+	  SCREENMAN:GetTopScreen():RemoveInputCallback(DDRInput(self))
+	  SCREENMAN:set_input_redirected(PLAYER_1, false)
+	  SCREENMAN:set_input_redirected(PLAYER_2, false)
+	end,
+	MenuLeftCommand=function(self) WheelMove(-1) end;
+	MenuLeftRepeatCommand=cmd(queuecommand,"MenuLeft");
+	MenuLeftReleaseCommand=function(self) WheelMove(0) end;
+	MenuRightCommand=function(self) WheelMove(1) end;
+	MenuRightRepeatCommand=cmd(queuecommand,"MenuRight");
+	MenuRightReleaseCommand=function(self) WheelMove(0) end;
+	BackCommand=function(self)SCREENMAN:GetTopScreen():SetNextScreenName("ScreenTitleMenu"):StartTransitioningScreen("SM_MenuTimer") end;
+	StartReleaseCommand=function(self)
+	  local mw = SCREENMAN:GetTopScreen("ScreenSelectMusic"):GetChild("MusicWheel");
+		  local song = GAMESTATE:GetCurrentSong()
+		  if song then
+			  SCREENMAN:GetTopScreen():StartTransitioningScreen("SM_MenuTimer")
+		  --[[elseif mw:GetSelectedType() == 'WheelItemDataType_Section' then
+		if GAMESTATE:GetExpandedSectionName() == mw:GetSelectedSection() then
+		  mw:SetOpenSection("")
+		else
+		  mw:SetOpenSection(mw:GetSelectedSection())
+		end;
+		SOUND:PlayOnce(THEME:GetPathS("","MusicWheel expand.ogg"))]]--
+	  else
+		  end;
+	  end;
+	StartRepeatCommand=function(self)
+		  local mw = SCREENMAN:GetTopScreen():GetChild("MusicWheel")
+	  local song = GAMESTATE:GetCurrentSong()
+		  --if mw:GetSelectedType('WheelItemDataType_Song') then
+	  if song then
+			  SCREENMAN:AddNewScreenToTop("ScreenPlayerOptionsPopup","SM_MenuTimer")
+		SCREENMAN:set_input_redirected(PLAYER_1, false)
+		SCREENMAN:set_input_redirected(PLAYER_2, false)
+	  else
+		  end;
+	  end;
+  };
+
 t[#t+1] = Def.ActorFrame {
 	Def.Quad{
 		InitCommand=cmd(setsize,230,118;diffuse,color("0,0,0,0.5");xy,DiffBGPosX(),SCREEN_CENTER_Y+141;visible,GAMESTATE:IsCourseMode() == false);

@@ -7,6 +7,5 @@ if GAMESTATE:GetPlayMode() == 'PlayMode_Oni' then
 end
 
 if GAMESTATE:GetPlayMode() == 'PlayMode_Rave' then stageFrame = "special" end
-if GAMESTATE:IsAnExtraStage() then stageFrame = "extra" end
 
 return Def.ActorFrame{ LoadActor(stageFrame) };
